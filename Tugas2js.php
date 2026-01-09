@@ -1,0 +1,477 @@
+<?php
+include "koneksi.php"; 
+?>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My DAILY JOURNAL</title>
+    <link rel="icon" href="img/logo.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
+    rel="stylesheet" 
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
+    crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <!-- nav begin -->
+   <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">My DAILY JOURNAL</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav  ms-auto  mb-2 mb-lg-0 text-dark">
+        <li class="nav-item">
+          <a class="nav-link" href="#home">Home</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link" href="#article">Article</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link" href="#gallery">Gallery</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link" href="#schedule">Schedule</a>
+         </li>
+         <li class="nav-item">
+          <a class="nav-link" href="#profile">PROFILE</a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link" href="login.php">login</a>
+          </li>
+      </ul>
+      <button id="tombol-Gelap" class="btn btn-warning" ><i class="bi bi-moon-fill"></i></button>
+      <button id="tombol-Terang" class="btn btn-secondary" ><i class="bi bi-sun-fill"></i></button>
+        </div>
+        </div>
+    </nav>
+    <!-- nav end -->
+    <!-- hero begin -->
+    <section id="home" class="change text-center p-5 bg-danger-subtle text-sm-start change-t " >
+        <div class=" container">
+          <div class=" d-sm-flex flex-sm-row-reverse align-items-center  ">
+            <img src="img/saya.jpg" class="img-fluid" width="300">
+            <div>
+              <h1 class=" fw-bold display-4">Semua adalah sebuah memori</h1>
+              <h4 class=" lead display-6">Semua tercatat tanpa tekecuali</h4>
+              <h6>
+                <span id="tanggal" ></span>
+                <span id="jam"> </span>
+              </h6>
+            </div>
+          </div>
+        </div>
+    </section>
+    <!-- hero end -->
+    <!-- article begin -->
+    <!-- article begin -->
+<section id="article" class="text-center p-5">
+  <div class="container">
+    <h1 class="fw-bold display-4 pb-3">article</h1>
+    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+      <?php
+      $sql = "SELECT * FROM article ORDER BY tanggal DESC";
+      $hasil = $conn->query($sql); 
+
+      while($row = $hasil->fetch_assoc()){
+      ?>
+        <div class="col">
+          <div class="card h-100">
+            <img src="img/<?= $row["gambar"]?>" class="card-img-top" alt="..." />
+            <div class="card-body">
+              <h5 class="card-title"><?= $row["judul"]?></h5>
+              <p class="card-text">
+                <?= $row["isi"]?>
+              </p>
+            </div>
+            <div class="card-footer">
+              <small class="text-body-secondary">
+                <?= $row["tanggal"]?>
+              </small>
+            </div>
+          </div>
+        </div>
+        <?php
+      }
+      ?> 
+    </div>
+  </div>
+</section>
+<!-- article end -->
+    <!-- article end -->
+
+    <!-- SCHEDULE -->
+      
+     <style>
+    /* Mode Terang (default) */
+    body {
+      background-color: #f8f9fa;
+      color: #212529;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .schedule-card {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .schedule-header {
+      font-weight: bold;
+      padding: 10px;
+    }
+
+    .schedule-card .p-3 {
+      background-color: #ffffff;
+      color: #212529;
+    }
+
+    /* Mode Gelap */
+    body.dark-mode {
+      background-color: #121212;
+      color: #f1f1f1;
+    }
+
+    body.dark-mode .schedule-card {
+      box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode .schedule-card .p-3 {
+      background-color: #1e1e1e;
+      color: #f1f1f1;
+    }
+
+    body.dark-mode .schedule-header {
+      color: #fff !important;
+    }
+
+    body.dark-mode .bg-white {
+      background-color: #1e1e1e !important;
+    }
+
+    body.dark-mode .text-muted {
+      color: #aaa !important;
+    }
+
+    /* Tombol mode */
+    #darkToggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+  </style>
+</head>
+
+<body>
+
+  <button id="darkToggle" class="btn btn-dark"> Mode Gelap</button>
+
+  <section id="schedule" class="change text-center p-5">
+    <div class="container">
+      <h1 class="fw-bold display-4 pb-3 text-start">Jadwal Kuliah & Kegiatan Mahasiswa</h1>
+
+      <div class="row row-cols-1 row-cols-md-4 g-4 justify-content-center">
+
+        <div class="col">
+          <div class="schedule-card">
+            <div class="schedule-header bg-primary text-white">Senin</div>
+            <div class="p-3 bg-white text-start">
+              <div class="fw-bold">09:00 - 12:00</div>
+              <div>Rekayasa Perangkat Lunak</div>
+              <div class="text-muted">Ruang H.5.4</div>
+              <div class="fw-bold">12:30 - 15:00</div>
+              <div>Logika Informatika</div>
+              <div class="text-muted">Ruang H.5.2</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="schedule-card">
+            <div class="schedule-header bg-success text-white">Selasa</div>
+            <div class="p-3 bg-white text-start">
+              <div class="fw-bold">08:00 - 10:20</div>
+              <div>Technopreneur</div>
+              <div class="text-muted">Ruang H.4.3</div>
+              <div class="fw-bold">16:20 - 18:00</div>
+              <div>Pendidikan Kewarganegaraan</div>
+              <div class="text-muted">Ruang E.3</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="schedule-card">
+            <div class="schedule-header bg-danger text-white">Rabu</div>
+            <div class="p-3 bg-white text-start">
+              <div class="fw-bold">07:00 - 09:00</div>
+              <div>Sistem Operasi</div>
+              <div class="text-muted">Ruang H.4.3</div>
+              <div class="fw-bold">10:20 - 12:00</div>
+              <div>Pemrograman Berbasis Web</div>
+              <div class="text-muted">Ruang D.2.J</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="schedule-card">
+            <div class="schedule-header bg-warning text-dark">Kamis</div>
+            <div class="p-3 bg-white text-start">
+              <div class="fw-bold">07:00 - 08:40</div>
+              <div>Basis Data</div>
+              <div class="text-muted">Ruang H.5.2</div>
+              <div class="fw-bold">16:30 - 18:00</div>
+              <div>Probabilitas dan Statistik</div>
+              <div class="text-muted">Ruang H.3.2</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="schedule-card">
+            <div class="schedule-header bg-info text-dark">Jumat</div>
+            <div class="p-3 bg-white text-start">
+              <div class="fw-bold">10:20 - 12:00</div>
+              <div>Basis Data</div>
+              <div class="text-muted">Ruang D.2.D</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="schedule-card">
+            <div class="schedule-header bg-info text-dark">Sabtu</div>
+            <div class="p-3 bg-white text-start">
+              <div class="fw-bold">06:00 - 09:00</div>
+              <div>Olahraga Random</div>
+              <div class="text-muted">Kos</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="schedule-card">
+            <div class="schedule-header bg-secondary text-white">Minggu</div>
+            <div class="p-3 bg-white text-start">
+              <div class="fw-bold">06:30</div>
+              <div></div>
+              <div class="text-muted">Belajar</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const toggle = document.getElementById('darkToggle');
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      toggle.classList.toggle('btn-light');
+      toggle.classList.toggle('btn-dark');
+      toggle.textContent = document.body.classList.contains('dark-mode') ? '☀️ Mode Terang' : '🌓 Mode Gelap';
+    });
+  </script>
+    <!-- gallery begin -->
+    <section id="gallery" class="change text-center p-5 bg-danger-subtle change-t" >
+        <div class="container">
+            <h1 class="fw-bold display-4 pb-3">Gallery</h1>
+           <div id="carouselExample" class="carousel slide">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="Renang.jpg"  class=" w-100" style="height: 400px; object-fit: contain;" alt="Renang">
+    </div>
+    <div class="carousel-item">
+      <img src="Wisuda.jpg"  class=" w-100" style="height: 400px; object-fit: contain;" alt="Wisuda" >
+    </div>
+    <div class="carousel-item">
+      <img src="Main.jpg"  class="w-100" style="height: 400px; object-fit: contain;"alt="Main">
+    </div>
+    <div class="carousel-item">
+      <img src="Ospek.jpg" class="w-100" style="height: 500px; object-fit: contain;" alt="Ospek">
+    </div>
+    <div class="carousel-item">
+      <img src="Nugas.jpg"  class=" w-100" style="height: 400px; object-fit: contain;" alt="Nugas">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+        </div>
+    </section>
+    <!-- gallery end -->
+
+    <!-- PROFILE -->
+    <section id="profile" class="change p-5 bg-danger-subtle">
+      <div class="container">
+        <h1 class="fw-bold display-4 text-start pb-3">Profil Mahasiswa</h1>
+
+        <div class="d-flex flex-column flex-md-row align-items-center justify-content-start">
+          <img src="saya.jpg" class="rounded-circle mb-3 mb-md-0 me-md-4" width="180" height="180" alt="Foto Profil">
+
+          <div class="card change-a text-center text-md-start" style="max-width: 700px;">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">Nadiah Azalia Khoirun Nufus</h5>
+              <p class="card-text mb-1"><strong>NIM:</strong> A11.2024.16011</p>
+              <p class="card-text mb-1"><strong>Program Studi:</strong> Teknik Informatika</p>
+              <p class="card-text mb-1"><strong>Email:</strong> nadiah.jpr2256@gmail.com</p>
+              <p class="card-text mb-1"><strong>Telepon:</strong> +62 81225785787</p>
+              <p class="card-text"><strong>Alamat:</strong> Mantingan taunan Jepara</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- footer begin -->
+    <footer class="change-ikon text-center p-5">
+      <div>
+        <a href="https://www.instagram.com/ndhazala_"  class=" bi bi-instagram h2 p-2 "></a>
+        <a href="https://x.com/udinusofficial" class="bi bi-twitter-x  h2 p-2"></a>
+        <a href="https://wa.me/+6281225785787" class=" bi bi-whatsapp  h2 p-2"></a>
+      </div>
+      <div class="change-ikon">
+        A11.2024.16011 &copy; 2025
+        Nadiah Azalia Khoirun Nufus
+      </div>
+    </footer>
+    <!-- footer end -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+    crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+    window.setTimeout("tampilwaktu()", 1000);
+
+    function tampilwaktu() {
+    var waktu = new Date();
+    var bulan = waktu.getMonth() + 1;
+
+    setTimeout("tampilwaktu()", 1000);
+    document.getElementById("tanggal").innerHTML =
+        waktu.getDate() + "/" + bulan + "/" + waktu.getFullYear();
+    document.getElementById("jam").innerHTML =
+        waktu.getHours() +
+        ":" +
+        waktu.getMinutes() +
+        ":" +
+        waktu.getSeconds();
+      }
+    </script>
+
+   <script type="text/javascript">
+    // Mendapatkan elemen tombol
+    const tombolGelap = document.getElementById("tombol-Gelap");
+    const tombolTerang = document.getElementById("tombol-Terang");
+
+    // Mendapatkan elemen koleksi yang akan diubah temanya
+    const collection = document.getElementsByClassName("change"); // Sections & Cards
+    const textCollection = document.getElementsByClassName("change-ikon"); // Teks/ikon footer
+
+    // Mendapatkan elemen footer (untuk mengubah background)
+    const footer = document.getElementById("mainFooter"); 
+    
+    // Pastikan tombol Terang nonaktif di awal
+    tombolTerang.disabled = true;
+
+
+    // --- FUNGSI MODE GELAP ---
+    tombolGelap.onclick = function () {
+        // 1. Body: Hapus kelas terang, tambahkan kelas gelap
+        document.body.classList.remove("bg-white", "text-dark");
+        document.body.classList.add("bg-dark", "text-white");
+
+        // 2. Tombol: Atur status disabled dan warna
+        tombolGelap.classList.remove("btn-warning");
+        tombolGelap.classList.add("btn-secondary");
+        tombolGelap.disabled = true; // Nonaktifkan tombol Gelap
+
+        tombolTerang.classList.remove("btn-secondary");
+        tombolTerang.classList.add("btn-warning");
+        tombolTerang.disabled = false; // Aktifkan tombol Terang
+
+        // 3. Footer: Ubah ke background gelap
+        if (footer) {
+            footer.classList.remove("bg-body-tertiary");
+            footer.classList.add("bg-dark");
+        }
+
+        // 4. Elemen Utama (Sections & Cards - Kelas "change")
+        for (let i = 0; i < collection.length; i++) {
+            // Hapus kelas terang yang mungkin ada
+            collection[i].classList.remove("bg-danger-subtle", "bg-white", "text-dark", "text-black");
+            
+            // Tambahkan kelas gelap
+            collection[i].classList.add("bg-secondary", "text-white");
+        }
+        
+        // 5. Teks/Ikon Footer (Kelas "change-ikon")
+        for (let i = 0; i < textCollection.length; i++) {
+            textCollection[i].classList.remove("text-dark", "text-black"); 
+            textCollection[i].classList.add("text-white"); 
+        }
+    };
+
+
+    // --- FUNGSI MODE TERANG (Kembali ke Semula) ---
+    tombolTerang.onclick = function () {
+        // 1. Body: Hapus kelas gelap, tambahkan kelas terang
+        document.body.classList.remove("bg-dark", "text-white");
+        document.body.classList.add("bg-white", "text-dark");
+
+        // 2. Tombol: Atur status disabled dan warna
+        tombolTerang.classList.remove("btn-warning");
+        tombolTerang.classList.add("btn-secondary");
+        tombolTerang.disabled = true; // Nonaktifkan tombol Terang
+
+        tombolGelap.classList.remove("btn-secondary");
+        tombolGelap.classList.add("btn-warning");
+        tombolGelap.disabled = false; // Aktifkan tombol Gelap
+
+        // 3. Footer: Kembalikan ke background terang
+        if (footer) {
+            footer.classList.remove("bg-dark");
+            footer.classList.add("bg-body-tertiary");
+        }
+
+        // 4. Elemen Utama (Sections & Cards - Kelas "change")
+        for (let i = 0; i < collection.length; i++) {
+            // Hapus kelas gelap
+            collection[i].classList.remove("bg-secondary", "text-white");
+            
+            // Kembalikan warna awal spesifik (berdasarkan ID/kondisi)
+            if (collection[i].id === "hero" || collection[i].id === "gallery") {
+                collection[i].classList.add("bg-danger-subtle"); // Untuk Hero dan Gallery
+            } else {
+                collection[i].classList.add("bg-white"); // Untuk Card
+            }
+            // Kembalikan warna teks awal
+            collection[i].classList.add("text-dark");
+        }
+
+        // 5. Teks/Ikon Footer (Kelas "change-ikon")
+        for (let i = 0; i < textCollection.length; i++) {
+            textCollection[i].classList.remove("text-white"); 
+            textCollection[i].classList.add("text-dark"); 
+        }
+    };
+</script>
+  </body>
+</html>
